@@ -176,60 +176,60 @@ class AddStairsCurved(bpy.types.Operator):
     bl_label = "Add Curved Stairs"
     bl_options = {'REGISTER', 'UNDO'}
 
-    height: FloatProperty(
+    height = FloatProperty(
         name="Height",
         description="Stairs Height",
         min=0.01, max=100.0,
         default=1.0,
     )
-    stairWidth: FloatProperty(
+    stairWidth = FloatProperty(
         name="Stair Width",
         description="Width of a single stair",
         min=0.01, max=100.0,
         default=1.0,
     )
-    stepType: EnumProperty(
+    stepType = EnumProperty(
         name="Step Type",
         description="Choose between using 'number of steps' or 'step height' for determining height of a step",
         items=step_type,
         default="NUM_STAIRS",
     )
-    numSteps: IntProperty(
+    numSteps = IntProperty(
         name="NumSteps",
         description="Number of Steps",
         min=1, max=100,
         default=6,
     )
-    stepHeight: FloatProperty(
+    stepHeight = FloatProperty(
         name="Step Height",
         description="Step Height",
         min=0.01, max=100.0,
         default=0.16666,
     )
-    curvature: FloatProperty(
+    curvature = FloatProperty(
         name="Curvature",
         description="Angle arc of staircase will sweep in degrees.",
         min=0.01, max=360.0,
         step=20,
         default=60.0,
     )
-    innerRadius: FloatProperty(
+    innerRadius = FloatProperty(
         name="Inner Radius",
         description="Radius of stair curve.",
         min=0.01, max=1000.0,
         default=1.0,
     )
-    sides: BoolProperty(
+    sides = BoolProperty(
         name="Create Sides",
         description="Build sides and bottom of stairs.",
         default=True
     )
-    ccw: BoolProperty(
+    ccw = BoolProperty(
         name="Counter Clockwise",
         description="Stairs should spiral in a counter-clockwise direction.",
         default=True
     )
-    layers: BoolVectorProperty(
+    layers = BoolVectorProperty(
         name="Layers",
         description="Object Layers",
         size=20,
@@ -242,17 +242,18 @@ class AddStairsCurved(bpy.types.Operator):
             ('VIEW', "View", "Align the new object to the view"),
             ('CURSOR', "3D Cursor", "Use the 3D cursor orientation for the new object")
     )
-    align: EnumProperty(
+    view_align = EnumProperty(
             name="Align",
-            items=align_items,
+            #items=align_items,
+            items=('WORLD', "World", "Align the new object to the world"),
             default='WORLD',
-            update=AddObjectHelper.align_update_callback,
+            update=AddObjectHelper.view_align_update_callback,
             )
-    location: FloatVectorProperty(
+    location = FloatVectorProperty(
         name="Location",
         subtype='TRANSLATION',
     )
-    rotation: FloatVectorProperty(
+    rotation = FloatVectorProperty(
         name="Rotation",
         subtype='EULER',
     )
@@ -295,7 +296,8 @@ class AddStairsCurved(bpy.types.Operator):
 
         # add the mesh as an object into the scene with this utility module
         from bpy_extras import object_utils
-        object_utils.object_data_add(context, mesh, operator=self)
+        #object_utils.object_data_add(context, mesh, operator=self)
+        object_utils.object_data_add(context, mesh)
 
         return {'FINISHED'}
 
@@ -304,14 +306,13 @@ def menu_func(self, context):
     self.layout.operator(AddStairsCurved.bl_idname, icon='FORWARD')
 
 def register():
+    bpy.types.INFO_MT_mesh_add.append(menu_func)
     bpy.utils.register_class(AddStairsCurved)
-    bpy.types.VIEW3D_MT_mesh_add.append(menu_func)
-    
 
 
 def unregister():
+    bpy.types.INFO_MT_mesh_add.remove(menu_func)
     bpy.utils.unregister_class(AddStairsCurved)
-    bpy.types.VIEW3D_MT_mesh_add.remove(menu_func)
 
 
 if __name__ == "__main__":

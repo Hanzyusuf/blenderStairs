@@ -1,4 +1,6 @@
-# Blender Stairs
+# Blender Stairs (Ported for blender 2.79)
+
+## The original blender stairs addon was made for blender 2.8+ which uses python 3.7, this addon has been ported for blender 2.79 which uses python 3.5.
 
 Adds a new mesh object to Blender for quickly creating staircases.  Useful for blocking in scenes - or just quickly making a flight of basic stairs without having to fiddle with the Array modifier.
 
